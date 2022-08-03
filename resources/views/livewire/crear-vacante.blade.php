@@ -1,4 +1,4 @@
-<form action="" class="md:w-1/2 space-y-5">
+<form action="" class="md:w-1/2 space-y-5" wire:submit.prevent='crearVacante'>
     <div>
         <x-label for="title" :value="__('Title')" />
 
@@ -6,38 +6,50 @@
             id="title" 
             class="block mt-1 w-full" 
             type="text" 
-            name="title" 
+            wire:model="title" 
             :value="old('title')" 
             placeholder="Ex. Developer"
         />
+        @error('title')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <div>
         <x-label for="salary" :value="__('Month Salary')" />
 
         <select 
-            name="salary" 
+            wire:model="salary" 
             id="salary" 
             class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
         >
-            <option value="" disabled selected>--Select a salary--</option>
-
+            <option value="" selected disabled>--Select a salary--</option>
+            @foreach ($salarios as $salario)
+                <option value="{{$salario->id}}">{{$salario->salary}}</option>
+            @endforeach
         </select>
-
+        @error('salary')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <div>
         <x-label for="category" :value="__('Category')" />
 
         <select 
-            name="category" 
+            wire:model="category" 
             id="category" 
             class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full"
         >
-            <option value="" disabled selected>--Select a category--</option>
+            <option value="" selected disabled>--Select a category--</option>
+            @foreach ($categorias as $categoria)
+                <option value="{{$categoria->id}}">{{$categoria->category}}</option>
+            @endforeach
 
         </select>
-
+        @error('category')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <div>
@@ -47,10 +59,13 @@
             id="company" 
             class="block mt-1 w-full" 
             type="text" 
-            name="company" 
+            wire:model="company" 
             :value="old('company')" 
             placeholder="Ex. IBM, Netflix, Amazon"
         />
+        @error('company')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <div>
@@ -60,20 +75,26 @@
             id="lastday" 
             class="block mt-1 w-full" 
             type="date" 
-            name="lastday" 
+            wire:model="lastday" 
             :value="old('lastday')" 
         />
+        @error('lastday')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <div>
         <x-label for="description" :value="__('Description')" />
 
         <textarea 
-            name="description" 
+            wire:model="description" 
             id="description"
             class="block mt-1 w-full h-72"
             :value="old('description')"  
         ></textarea>
+        @error('description')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <div>
@@ -83,8 +104,20 @@
             id="image" 
             class="block mt-1 w-full" 
             type="file" 
-            name="image" 
+            wire:model="image"
+            accept="image/*"
         />
+
+        <div class="my-5 w-100 flex flex-col justify-center items-center">
+            @if ($image)
+                imagen:
+                <img src="{{$image->temporaryUrl()}}" alt="">
+            @endif
+        </div>
+
+        @error('image')
+            <livewire:mostrar-alerta :message="$message" />
+        @enderror
     </div>
 
     <x-button>
