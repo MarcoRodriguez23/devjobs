@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if($this->app->environment('production'))
+        {
+            URL::forceScheme('https');
+        }
+        
         VerifyEmail::toMailUsing(function($notifiable,$url){
             return (new MailMessage)
                 ->subject('Verify Account')
@@ -32,5 +37,7 @@ class AppServiceProvider extends ServiceProvider
                 ->action('Verify Email Address',$url)
                 ->line('If you not create an account, no further action is required.');
         });
+
+        
     }
 }
